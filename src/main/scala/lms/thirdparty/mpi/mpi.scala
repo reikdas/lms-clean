@@ -38,6 +38,12 @@ trait MPIOps extends CMacro with LibStruct with LibFunction {
   def mpi_get_processor_name(name: Rep[Array[Char]], len: Var[Int]) =
     libFunction[Int]("MPI_Get_processor_name", Unwrap(name), UnwrapV(len))(Seq[Int](), Seq(0, 1), Set(1))
 
+  def mpi_send[T: Manifest](data: Rep[T], count: Rep[Int], datatype: Rep[MPIDataType], dest: Rep[Int], tag: Rep[Int], world: Rep[MPIComm]) =
+    unchecked[Unit]("MPI_Send(&", data, ", ", count, ",", datatype, ", ", dest, ", ", tag, ", ", world, ")")
+
+  def mpi_rec[T:Manifest](data: Rep[T], count: Rep[Int], datatype: Rep[MPIDataType], source: Rep[Int], tag: Rep[Int], world: Rep[MPIComm]) =
+    unchecked[Unit]("MPI_Recv(&", data, ", ", count, ",", datatype, ", ", source, ", ", tag, ", ", world, ", MPI_STATUS_IGNORE)")
+
   def mpi_barrier(world: Rep[MPIComm]) =
     libFunction[Int]("MPI_Barrier", Unwrap(world))(Seq(0), Seq[Int](), Set[Int](), Adapter.CTRL)
 

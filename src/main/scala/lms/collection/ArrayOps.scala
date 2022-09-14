@@ -58,6 +58,9 @@ trait ArrayOps extends PrimitiveOps {
   def NewArray[T:Manifest](x: Rep[Int]): Rep[Array[T]] = {
     Wrap[Array[T]](Adapter.g.reflectMutable("NewArray", Unwrap(x)))
   }
+  def NewArray0[T: Manifest](x: Rep[Int]): Rep[Array[T]] = {
+    Wrap[Array[T]](Adapter.g.reflectMutable("NewArray", Unwrap(x), Backend.Const(0)))
+  }
   def Array[T:Manifest](xs: Rep[T]*): Rep[Array[T]] = {
     Wrap[Array[T]](Adapter.g.reflectMutable("Array", xs.map(Unwrap(_)):_*))
   }
