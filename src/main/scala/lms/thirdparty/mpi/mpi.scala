@@ -50,6 +50,15 @@ trait MPIOps extends CMacro with LibStruct with LibFunction {
   def mpi_comm_split(comm: Rep[MPIComm], color: Rep[Int], key: Rep[Int], newcomm: Rep[MPIComm]) =
     libFunction[Int]("MPI_Comm_split", Unwrap(comm), Unwrap(color), Unwrap(key), Unwrap(newcomm))(Seq(0,1,2), Seq(3), Set(3), Adapter.CTRL)
 
+  def mpi_allgather(sendbuf: Rep[Array[Int]], sendcount: Rep[Int], sendtype: Rep[MPIDataType], recvbuf: Rep[Array[Int]],
+                    recvcount: Rep[Int], recvtype: Rep[MPIDataType], comm: Rep[MPIComm]) =
+    libFunction[Unit]("MPI_Allgather", Unwrap(sendbuf), Unwrap(sendcount), Unwrap(sendtype), Unwrap(recvbuf), Unwrap(recvcount), Unwrap(recvtype), Unwrap(comm))(Seq(0, 1, 2, 3, 4, 5, 6), Seq(3), Set())
+
+  def mpi_gatherv(sendbuf: Rep[Array[Char]], sendcount: Rep[Int], sendtype: Rep[MPIDataType], recvbuf: Rep[Array[Char]],
+                  recvcounts: Rep[Array[Int]], displs: Rep[Array[Int]], recvtype: Rep[MPIDataType], root: Rep[Int], comm: Rep[MPIComm]) =
+    libFunction[Unit]("MPI_Gatherv", Unwrap(sendbuf), Unwrap(sendcount), Unwrap(sendtype), Unwrap(recvbuf), Unwrap(recvcounts),
+      Unwrap(displs), Unwrap(recvtype), Unwrap(root), Unwrap(comm))(Seq(0, 1, 2, 3, 4, 5, 6, 7, 8), Seq(3), Set())
+
   class MPIDataType
   def mpi_datatype_null: Rep[MPIDataType] = cmacro[MPIDataType]("MPI_DATATYPE_NULL")
   def mpi_char: Rep[MPIDataType] = cmacro[MPIDataType]("MPI_CHAR")

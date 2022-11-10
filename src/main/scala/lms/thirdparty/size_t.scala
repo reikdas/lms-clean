@@ -53,7 +53,7 @@ trait SizeTOps extends Base with PrimitiveOps with CLibs {
 
   // void * memcpy ( void * destination, const void * source, size_t num );
   def memcpy[T:Manifest](destination: Rep[Array[T]], source: Rep[Array[T]], num: Rep[SizeT]) =
-    libFunction[Unit]("memcpy", Unwrap(destination), Unwrap(source), Unwrap(num))(Seq(1, 2), Seq(0), Set[Int]())
+    libFunction[Array[T]]("memcpy", Unwrap(destination), Unwrap(source), Unwrap(num))(Seq(1, 2), Seq(0), Set[Int]())
   def memcpyOfT[T:Manifest](dst: Rep[Array[T]], src: Rep[Array[T]], count: Rep[Int])(implicit __pos: SourceContext) =
     memcpy[T](dst, src, SizeT(count * sizeOf[T]))
 
