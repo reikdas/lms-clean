@@ -7,10 +7,11 @@ import lms.core.Backend._
 import lms.core.virtualize
 import lms.core.utils.time
 import lms.macros.SourceContext
+import lms.collection.mutable.ArrayOps
 
 import lms.collection._
 
-trait MPIOps extends CMacro with LibStruct with LibFunction {
+trait MPIOps extends CMacro with LibStruct with LibFunction with ArrayOps {
   /* LMS support for MPI library */
 
   // this is how we deal with constant macros
@@ -50,11 +51,11 @@ trait MPIOps extends CMacro with LibStruct with LibFunction {
   def mpi_comm_split(comm: Rep[MPIComm], color: Rep[Int], key: Rep[Int], newcomm: Rep[MPIComm]) =
     libFunction[Int]("MPI_Comm_split", Unwrap(comm), Unwrap(color), Unwrap(key), Unwrap(newcomm))(Seq(0,1,2), Seq(3), Set(3), Adapter.CTRL)
 
-  def mpi_allgather(sendbuf: Rep[Array[Int]], sendcount: Rep[Int], sendtype: Rep[MPIDataType], recvbuf: Rep[Array[Int]],
-                    recvcount: Rep[Int], recvtype: Rep[MPIDataType], comm: Rep[MPIComm]) =
+  def mpi_allgather(sendbuf: Rep[LongArray[Long]], sendcount: Rep[Long], sendtype: Rep[MPIDataType], recvbuf: Rep[LongArray[Long]],
+                    recvcount: Rep[Long], recvtype: Rep[MPIDataType], comm: Rep[MPIComm]) =
     libFunction[Unit]("MPI_Allgather", Unwrap(sendbuf), Unwrap(sendcount), Unwrap(sendtype), Unwrap(recvbuf), Unwrap(recvcount), Unwrap(recvtype), Unwrap(comm))(Seq(0, 1, 2, 3, 4, 5, 6), Seq(3), Set())
 
-  def mpi_gatherv(sendbuf: Rep[Array[Char]], sendcount: Rep[Int], sendtype: Rep[MPIDataType], recvbuf: Rep[Array[Char]],
+  def mpi_gatherv(sendbuf: Rep[LongArray[Char]], sendcount: Rep[Int], sendtype: Rep[MPIDataType], recvbuf: Rep[LongArray[Char]],
                   recvcounts: Rep[Array[Int]], displs: Rep[Array[Int]], recvtype: Rep[MPIDataType], root: Rep[Int], comm: Rep[MPIComm]) = {
     val effectkey = recvbuf match {
       case EffectView(x, base) => base
