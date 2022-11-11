@@ -27,6 +27,8 @@ trait ScannerOps extends Equal with ArrayOps with RangeOps with CLibs {
   // mmap function maps a file to memory
   def mmap[T:Manifest](fd: Rep[Int], len: Rep[Long]) = static_cast[Array[T], Array[T]](libFunction[Array[T]]("mmap",
     lms.core.Backend.Const(0), Unwrap(len), Unwrap(prot), Unwrap(fd), lms.core.Backend.Const(0))(Seq[Int](), Seq[Int](), Set[Int]()))
+  def mmap2[T:Manifest](fd: Rep[Int], len: Rep[Long]) = (libFunction[LongArray[T]]("mmap",
+    lms.core.Backend.Const(0), Unwrap(len), Unwrap(prot), Unwrap(fd), lms.core.Backend.Const(0))(Seq[Int](), Seq[Int](), Set[Int]()))
   def close(fd: Rep[Int]) = libFunction[Unit]("close", Unwrap(fd))(Seq[Int](), Seq[Int](), Set[Int](), Adapter.CTRL)
   def prints(s: Rep[String]): Rep[Int] = libFunction[Int]("printll", Unwrap(s))(Seq[Int](), Seq[Int](), Set[Int](), Adapter.CTRL)
 
