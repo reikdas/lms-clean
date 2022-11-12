@@ -7,6 +7,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 long fsize(int fd) {
   struct stat stat;
